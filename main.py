@@ -19,7 +19,7 @@ def create_list(dic):
     lis.sort(reverse=True,key=sort_on)
     return lis
 
-def format(path, words, dic):
+def print_report(path, words, dic):
     lis = create_list(dic)
     print(f"============ BOOKBOT ============")
     print(f"Analyzing book found at {path}")
@@ -34,9 +34,15 @@ def main():
     if len(sys.argv) != 2:
         sys.exit("Usage: python3 main.py <path_to_book>")
     path = sys.argv[1]
-    contents = get_book_text(path)
-    words = get_num_words(contents)
-    dict = count_characters(contents)
-    format(path, words, dict)
+    try:
+        contents = get_book_text(path)
+        words = get_num_words(contents)
+        char_count = count_characters(contents)
+        print_report(path, words, char_count)
+    
+    except FileNotFoundError:
+        sys.exit(f"Error: The file '{path}' does not exist")
+    except PermissionError:
+        sys.exit(f"Error: No permission to read '{path}'")
 
 main()
